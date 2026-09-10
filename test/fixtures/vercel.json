@@ -1,0 +1,39 @@
+{
+  "redirects": [
+    {
+      "source": "/old-a",
+      "destination": "/old-b",
+      "permanent": true
+    },
+    {
+      "source": "/old-b",
+      "destination": "/old-a",
+      "permanent": true
+    },
+    {
+      "source": "/x1",
+      "destination": "/x2",
+      "permanent": true
+    },
+    {
+      "source": "/x2",
+      "destination": "/x3",
+      "permanent": true
+    },
+    {
+      "source": "/x3",
+      "destination": "/guides/clean-guide/",
+      "permanent": true
+    },
+    {
+      "source": "/guides/bad-meta/",
+      "destination": "/guides/clean-guide/",
+      "permanent": true
+    },
+    {
+      "source": "/promo",
+      "destination": "/guides/clean-guide/",
+      "permanent": true
+    }
+  ]
+}

@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Fifteen Gates</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  @page { size: A4; margin: 0; }
+  :root {
+    --ink: #14181c; --paper: #ffffff; --accent: #0f6e63; --accent-soft: #e3f1ee; --slate: #5b6670;
+    --rule: #d9dee3; --fail: #b3261e; --warn: #9a6700; --pass: #1f7a3d; --panel: #14181c; --panel-ink: #e8ecef;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--paper); color: var(--ink); }
+  body { font-family: "IBM Plex Sans", "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 10.4pt; line-height: 1.5; }
+  .page { width: 210mm; height: 297mm; padding: 18mm 17mm 16mm; page-break-after: always; position: relative; overflow: hidden; display: flex; flex-direction: column; }
+  .page:last-child { page-break-after: auto; }
+  .footer { position: absolute; left: 17mm; right: 17mm; bottom: 9mm; display: flex; justify-content: space-between; font-size: 8pt; color: var(--slate); letter-spacing: .04em; text-transform: uppercase; }
+  h1, h2, h3 { font-family: "Fraunces", "Iowan Old Style", Georgia, serif; font-weight: 600; margin: 0; text-wrap: balance; }
+  h1 { font-size: 46pt; line-height: 1.02; letter-spacing: -.01em; }
+  h2 { font-size: 22pt; line-height: 1.15; margin-bottom: 4mm; }
+  h3 { font-size: 13pt; line-height: 1.2; }
+  p { margin: 0 0 3mm; }
+  .eyebrow { font-size: 8.5pt; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin-bottom: 4mm; }
+  .lede { font-size: 12.5pt; line-height: 1.45; color: var(--ink); max-width: 150mm; }
+  .muted { color: var(--slate); }
+  code, pre { font-family: "IBM Plex Mono", Menlo, Consolas, monospace; }
+  code { font-size: 9.2pt; background: var(--accent-soft); padding: 0 .3em; border-radius: 2px; }
+  pre { background: var(--panel); color: var(--panel-ink); padding: 4mm 5mm; border-radius: 3px; font-size: 8.6pt; line-height: 1.45; margin: 0 0 4mm; white-space: pre; overflow: hidden; }
+  pre .ok { color: #7fd1a5; } pre .fail { color: #ff9b93; } pre .warn { color: #f2c76b; } pre .dim { color: #8b949e; }
+  .cmd { font-family: "IBM Plex Mono", Menlo, monospace; font-size: 15pt; color: var(--accent); font-weight: 500; }
+  .cover-top { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+  .cover-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5mm; margin-top: 8mm; }
+  .stat { border-top: 2px solid var(--ink); padding-top: 2.5mm; }
+  .stat b { display: block; font-family: "Fraunces", Georgia, serif; font-size: 22pt; font-weight: 500; line-height: 1; margin-bottom: 1.5mm; font-variant-numeric: tabular-nums; }
+  .stat span { font-size: 9pt; color: var(--slate); }
+  ol.failures { list-style: none; padding: 0; margin: 4mm 0 0; counter-reset: f; display: grid; gap: 3mm; }
+  ol.failures li { counter-increment: f; display: grid; grid-template-columns: 11mm 1fr; gap: 3mm; padding-bottom: 3mm; border-bottom: 1px solid var(--rule); }
+  ol.failures li::before { content: counter(f, decimal-leading-zero); font-family: "Fraunces", Georgia, serif; font-size: 16pt; color: var(--accent); line-height: 1; padding-top: 1mm; font-variant-numeric: tabular-nums; }
+  ol.failures b { display: block; font-weight: 600; }
+  .gate { display: grid; grid-template-columns: 16mm 1fr; gap: 4mm; padding: 4mm 0; border-top: 1px solid var(--rule); }
+  .gate:first-of-type { border-top: 2px solid var(--ink); }
+  .gate .num { font-family: "Fraunces", Georgia, serif; font-size: 24pt; font-weight: 500; color: var(--accent); line-height: 1; font-variant-numeric: tabular-nums; }
+  .gate .head { display: flex; align-items: baseline; gap: 3mm; margin-bottom: 1.5mm; }
+  .chip { font-size: 7.5pt; letter-spacing: .08em; text-transform: uppercase; font-weight: 600; padding: .5mm 1.8mm; border-radius: 2px; border: 1px solid currentColor; }
+  .chip.fail { color: var(--fail); } .chip.warn { color: var(--warn); }
+  .gate p { margin: 0 0 1.5mm; }
+  .gate .ex { font-family: "IBM Plex Mono", Menlo, monospace; font-size: 8.2pt; color: var(--ink); background: #f3f5f6; padding: 1.6mm 2.5mm; border-left: 2px solid var(--accent); margin: 1.5mm 0 2mm; white-space: pre-wrap; }
+  .lbl { font-weight: 600; color: var(--slate); font-size: 8.5pt; letter-spacing: .06em; text-transform: uppercase; margin-right: 1.5mm; }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 8mm; }
+  .steps { list-style: none; padding: 0; margin: 0; counter-reset: s; }
+  .steps li { counter-increment: s; display: grid; grid-template-columns: 8mm 1fr; gap: 2mm; margin-bottom: 3mm; }
+  .steps li::before { content: counter(s); font-family: "Fraunces", Georgia, serif; font-size: 14pt; color: var(--accent); line-height: 1.1; }
+  table { width: 100%; border-collapse: collapse; font-size: 9.4pt; margin: 2mm 0 4mm; }
+  th, td { text-align: left; padding: 2mm 2mm; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  th { font-size: 8pt; letter-spacing: .06em; text-transform: uppercase; color: var(--slate); font-weight: 600; border-bottom: 2px solid var(--ink); }
+  td.price { font-variant-numeric: tabular-nums; white-space: nowrap; font-weight: 600; }
+  .ladder td:first-child { font-weight: 600; }
+  .callout { background: var(--accent-soft); border-left: 3px solid var(--accent); padding: 3.5mm 5mm; margin: 4mm 0; }
+  .callout p:last-child { margin: 0; }
+  .group-note { font-size: 9.5pt; color: var(--slate); margin-bottom: 2mm; }
+</style>
+</head>
+<body>
+
+<!-- 1. COVER -->
+<section class="page">
+  <div class="cover-top">
+    <div class="eyebrow">OperStack</div>
+    <h1>Fifteen gates</h1>
+    <p class="lede" style="margin-top:6mm">The checks a content site must pass before it ships, in the order they run, with the failure each one was written for and the fix. Free, open source, one command.</p>
+    <p class="cmd" style="margin-top:6mm">npx @operstack/gates</p>
+    <div class="cover-stats">
+      <div class="stat"><b>1,660</b><span>MDX files in one real run</span></div>
+      <div class="stat"><b>13 s</b><span>for all fifteen gates on a laptop</span></div>
+      <div class="stat"><b>11</b><span>content sites the gates were built on</span></div>
+    </div>
+  </div>
+  <div class="muted" style="font-size:9pt; max-width:140mm">Every gate in this document exists because that exact defect shipped at least once and the build log said nothing. The examples come from a fictional demo site, Isla Verde, that ships with the package. Every number in the examples is invented.</div>
+  <div class="footer"><span>OperStack, 2026</span><span>oper-stack.com</span></div>
+</section>
+
+<!-- 2. WHY -->
+<section class="page">
+  <div class="eyebrow">Why this exists</div>
+  <h2>What ships when nobody checks</h2>
+  <p class="lede">Every content site that grows past a few hundred pages accumulates the same debt. None of it fails a build. All of it fails a reader, and answer engines stop citing a site long before a person complains.</p>
+  <ol class="failures">
+    <li><div><b>A currency sign that renders as a question mark in the search snippet.</b><span class="muted">Pasted from a spreadsheet. Fine in the editor, wrong on the results page.</span></div></li>
+    <li><div><b>A title cut on the last stop word.</b><span class="muted">A template added a brand suffix and truncated at 60 characters. 361 titles ended on "the" or "for".</span></div></li>
+    <li><div><b>The same paragraph on 121 pages with the numbers swapped.</b><span class="muted">Exact-match dedupe never saw it. Google's spam policy calls it scaled content abuse.</span></div></li>
+    <li><div><b>An H2 with nothing under it.</b><span class="muted">Twelve headings generated, nine filled. The other three rendered as a promise with no delivery.</span></div></li>
+    <li><div><b>An anchor that names one district and links to another.</b><span class="muted">The reader clicks "Playa Norte overview" and lands in Playa Sur.</span></div></li>
+    <li><div><b>A page merged away six weeks ago, still advertised in llms.txt.</b><span class="muted">Answer engines read the index instead of crawling. They cited a redirect.</span></div></li>
+    <li><div><b>"7.5% net yield" that nobody ever sourced.</b><span class="muted">On 70 pages. Buyers who did the maths did not come back.</span></div></li>
+  </ol>
+  <div class="callout" style="margin-top:6mm">
+    <p><b>How to read this document.</b> Pages 3 to 6 walk through the fifteen gates in four groups: mechanical, corpus debt, links and routing, trust. Page 7 shows how to run them. Page 8 shows what to do when they find more than you can fix.</p>
+  </div>
+  <div class="footer"><span>Fifteen gates</span><span>2</span></div>
+</section>
+
+<!-- 3. MECHANICAL -->
+<section class="page">
+  <div class="eyebrow">Group one</div>
+  <h2>Mechanical: minutes to fix</h2>
+  <p class="group-note">Deterministic checks. Fix these first; they take minutes and they hide the real findings behind noise.</p>
+
+  <div class="gate"><div class="num">01</div><div>
+    <div class="head"><h3>Characters</h3><span class="chip fail">fail</span></div>
+    <p><span class="lbl">Failure</span>Currency signs in tables, emoji in headings, em dashes auto-corrected on every line.</p>
+    <div class="ex">bad-characters.mdx:8   currency sign ₡: spell it CRC
+bad-characters.mdx:8   decorative pictograph 🏝
+bad-characters.mdx:8   em or en dash: use a comma, a colon, parentheses or a hyphen in ranges</div>
+    <p><span class="lbl">Fix</span><code>gates --fix</code> rewrites signs to codes and removes pictographs. Dashes are left to a person: the right replacement depends on the sentence.</p>
+  </div></div>
+
+  <div class="gate"><div class="num">02</div><div>
+    <div class="head"><h3>MDX compile</h3><span class="chip fail">fail</span></div>
+    <p><span class="lbl">Failure</span>An eleven-minute build fails on file 1,214 because of a quote inside a JSX string. Fix, push, wait, file 1,380.</p>
+    <div class="ex">bad-mdx.mdx   Expected a closing tag for `&lt;Callout&gt;` (10:1-10:22)</div>
+    <p><span class="lbl">Fix</span>Every file is compiled up front with the build's own parser. All failures at once, with the line.</p>
+  </div></div>
+
+  <div class="gate"><div class="num">03</div><div>
+    <div class="head"><h3>Frontmatter</h3><span class="chip fail">fail</span></div>
+    <p><span class="lbl">Failure</span>Missing fields, cut titles, descriptions ending in an ellipsis, hero images on a stock host that changed its hotlink policy, related slugs pointing at pages that no longer exist.</p>
+    <div class="ex">bad-frontmatter.mdx   title length 17, expected 40 to 60
+bad-frontmatter.mdx   description ends on a stop word (cut)
+bad-frontmatter.mdx   relatedSlug "ghost-slug" does not exist</div>
+    <p><span class="lbl">Fix</span>Rewrite the field. For cut titles, drop the brand suffix rather than the promise.</p>
+  </div></div>
+
+  <div class="gate"><div class="num">04</div><div>
+    <div class="head"><h3>Structure</h3><span class="chip fail">fail</span></div>
+    <p><span class="lbl">Failure</span>A commercial page that reads well and answers nothing: no answer at the top, one table, two H2s, no risks, four numbers in two thousand words. Nothing to quote, nothing to decide with.</p>
+    <div class="ex">bad-structure.mdx   missing answer-first block (Quick answer or TL;DR)
+bad-structure.mdx   heading level skip H2 to H4 at line 12
+bad-structure.mdx   draft or source marker left in text ([VERIFY], TODO, source needed)</div>
+    <p><span class="lbl">Fix</span>Answer-first block, four H2s, six table rows, the FAQ count the collection needs, pros and cons, risks, scenarios, three numeric facts per 500 words, five internal links. Thresholds live in the config.</p>
+  </div></div>
+  <div class="footer"><span>Fifteen gates</span><span>3</span></div>
+</section>
+
+<!-- 4. CORPUS DEBT -->
+<section class="page">
+  <div class="eyebrow">Group two</div>
+  <h2>Corpus debt: where the work is</h2>
+  <p class="group-note">These three gates find what generated content leaves behind. They are the reason the package exists.</p>
+
+  <div class="gate"><div class="num">05</div><div>
+    <div class="head"><h3>Duplication</h3><span class="chip fail">fail</span></div>
+    <p><span class="lbl">Failure</span>121 project cards with the same closing paragraph and different numbers. The exact-match checker passed every one of them.</p>
+    <div class="ex">2 pages share: "the first 50 metres from the high tide line belong to the state and cannot be sold…"
+2 pages share a template with swapped numbers: "median asking price per sqm in # is # crc, based on the registry…"</div>
+    <p><span class="lbl">How</span>Every paragraph of twelve words or more, compared exactly and with the digits masked, across pages and within a page. Same-shaped tables are structure, not prose, and are not counted. Disclaimers that must repeat go into a <code>boilerplate</code> list.</p>
+    <p><span class="lbl">Fix</span>One page keeps the paragraph, the others link to it. For templates with swapped numbers, write the sentence from the fact, not from the template.</p>
+  </div></div>
+
+  <div class="gate"><div class="num">06</div><div>
+    <div class="head"><h3>Shared sentences</h3><span class="chip fail">fail</span></div>
+    <p><span class="lbl">Failure</span>The block check passed. The corpus still read as machine-written: one sentence, inside different paragraphs, on 454 pages.</p>
+    <div class="ex">3x sentence: "every lease longer than three years must be registered at the land registry within 30 days"</div>
+    <p><span class="lbl">How</span>Sentences of ten words or more, list items and table cells of eight words or more, normalised and counted across indexable pages. Three pages is a finding.</p>
+    <p><span class="lbl">Fix</span>Same as gate 05, one level down.</p>
+  </div></div>
+
+  <div class="gate"><div class="num">07</div><div>
+    <div class="head"><h3>Hollow sections</h3><span class="chip fail">fail</span></div>
+    <p><span class="lbl">Failure</span>An outline with twelve H2s, nine written. Sections that open by restating their heading. Eleven FAQ answers that all say "Yes, in most cases. Contact our team."</p>
+    <div class="ex">hollow.mdx   empty section "What the charge covers"
+hollow.mdx   section "How the charge is set" holds only shared filler
+hollow.mdx   numbered list or steps start above 1
+hollow.mdx   1 table cell(s) holding only a comma</div>
+    <p><span class="lbl">Fix</span>Write the section or delete the heading. A heading that promises and delivers nothing costs more than no heading.</p>
+  </div></div>
+  <div class="footer"><span>Fifteen gates</span><span>4</span></div>
+</section>
+
+<!-- 5. LINKS AND ROUTING -->
+<section class="page">
+  <div class="eyebrow">Group three</div>
+  <h2>Links and routing: usually one config change</h2>
+  <p class="group-note">Five gates that fail quietly between deploys and are cheap to keep green once the pipeline generates the right files.</p>
+
+  <div class="gate"><div class="num">08</div><div>
+    <div class="head"><h3>Internal links</h3><span class="chip fail">fail</span></div>
+    <p><span class="lbl">Failure</span>Two content waves merged on separate branches. Neither had a broken link. The merged site had forty.</p>
+    <div class="ex">/guides/does-not-exist/ (1 page(s), e.g. index.html)</div>
+    <p><span class="lbl">How</span>Every href, src and action in the built HTML resolved against the build and the redirects file. Without a build, source links are checked against the content index.</p>
+  </div></div>
+
+  <div class="gate"><div class="num">09</div><div>
+    <div class="head"><h3>Link semantics</h3><span class="chip warn">warn</span></div>
+    <p><span class="lbl">Failure</span>An anchor names one district, the href goes to another. A project name links to a generic guide instead of the project's page. One pillar linked four times on one screen.</p>
+    <div class="ex">bad-links.mdx   anchor names playa norte but link goes to playa sur: [Playa Norte overview](/areas/playa-sur/)
+bad-links.mdx   anchor is an entity name but links elsewhere: [Marina Towers](/guides/clean-guide/)</div>
+    <p><span class="lbl">Fix</span>Make the anchor say where the link goes. Entities link to their own page.</p>
+  </div></div>
+
+  <div class="gate"><div class="num">10</div><div>
+    <div class="head"><h3>Meta</h3><span class="chip warn">warn</span></div>
+    <p><span class="lbl">Failure</span>"Condo Guide 2025 vs 2026: Buyer Guide". The year twice, the format word twice, forty per cent of the title spent on nothing.</p>
+    <div class="ex">bad-meta.mdx   title repeats the year   ·   title repeats "guide"</div>
+  </div></div>
+
+  <div class="gate"><div class="num">13</div><div>
+    <div class="head"><h3>Redirects</h3><span class="chip fail">fail</span></div>
+    <p><span class="lbl">Failure</span>A merged into B, then B into C. Search engines follow two hops grudgingly and three not at all. A page whose source still existed was redirected away and sent every visitor elsewhere.</p>
+    <div class="ex">cycle: /old-a -&gt; /old-b -&gt; /old-a
+chain of 3: /x1 -&gt; /x2 -&gt; /x3 (point the first source at the final target)
+live page /guides/bad-meta/ is redirected away</div>
+  </div></div>
+
+  <div class="gate"><div class="num">14</div><div>
+    <div class="head"><h3>AI index</h3><span class="chip fail">fail</span></div>
+    <p><span class="lbl">Failure</span>llms.txt generated once. A month later: four pages merged away, one set to noindex, two collections added. Answer engines kept reading the old file.</p>
+    <div class="ex">index lists a page that does not exist: /guides/ghost-page/
+index lists noindex page /guides/draft-page/
+indexable page missing from the index: /guides/bad-structure/</div>
+    <p><span class="lbl">Fix</span>Generate the index from the corpus in the build. Run the gate after the build.</p>
+  </div></div>
+  <div class="footer"><span>Fifteen gates</span><span>5</span></div>
+</section>
+
+<!-- 6. TRUST -->
+<section class="page">
+  <div class="eyebrow">Group four</div>
+  <h2>Trust: editorial work</h2>
+  <p class="group-note">The last three gates are about whether a person, a quality rater or an answer engine should believe the page.</p>
+
+  <div class="gate"><div class="num">11</div><div>
+    <div class="head"><h3>Readability</h3><span class="chip warn">warn</span></div>
+    <p><span class="lbl">Failure</span>A page that passed every structural gate and still read as generated: a dash every second line, four "Scenario A to D" blocks, sixty-word sentences.</p>
+    <div class="ex">bad-readability.mdx   5 sentences over 45 words</div>
+    <p><span class="lbl">How</span>Dashes per 500 words, template scenario blocks, corpus stamps left in text, sentences over 45 words, paragraphs over 170 words. Warns rather than fails: a legal page may legitimately run long.</p>
+  </div></div>
+
+  <div class="gate"><div class="num">12</div><div>
+    <div class="head"><h3>Images</h3><span class="chip fail">fail</span></div>
+    <p><span class="lbl">Failure</span>A CDN account migrated. 2,300 hero images returned 404 for nine days. The pages still built.</p>
+    <div class="ex">bad-images.mdx   local image missing in public: /images/missing-hero.jpg</div>
+    <p><span class="lbl">How</span>Every image URL under <code>src/</code> gets a HEAD request, twelve in parallel with one retry. Local paths are checked against <code>public/</code>. Run it on a schedule: images break between deploys.</p>
+  </div></div>
+
+  <div class="gate"><div class="num">15</div><div>
+    <div class="head"><h3>Unsourced claims</h3><span class="chip fail">fail</span></div>
+    <p><span class="lbl">Failure</span>"A coastal one-bedroom earns a 7.5% net yield with 82% occupancy." No source, no method, on 70 pages.</p>
+    <div class="ex">bad-claims.mdx   yield or ROI figure without a source: "7.5% net yield"
+bad-claims.mdx   nightly rate without a source: "$140 per night"</div>
+    <p><span class="lbl">How</span>Yield, ROI, occupancy, nightly rate, income per period and appreciation figures in every paragraph. A paragraph passes when it names an allowed source, uses a sourcing phrase, or frames the figure as a worked example.</p>
+    <p><span class="lbl">Fix</span>Name the source in the same paragraph, turn the figure into an example with stated assumptions, or delete it. This is the gate that takes days, and the one that decides whether the site is believed.</p>
+  </div></div>
+
+  <div class="callout">
+    <p><b>Fix in order.</b> Gates 01 to 04 take minutes. Gates 05 to 07 hold the corpus debt. Gates 08 to 14 are usually one change in the pipeline. Gate 15 is editorial work.</p>
+  </div>
+  <div class="footer"><span>Fifteen gates</span><span>6</span></div>
+</section>
+
+<!-- 7. RUN IT -->
+<section class="page">
+  <div class="eyebrow">Run it</div>
+  <h2>Three steps, no setup ceremony</h2>
+  <div class="cols">
+    <div>
+      <ol class="steps">
+        <li><div><b>Install.</b> Node 20 or newer, any folder of MDX or Markdown with frontmatter (Astro content collections work out of the box).<br><code>npm i -D @operstack/gates</code></div></li>
+        <li><div><b>Describe the site.</b> One JSON file at the project root. Or skip it: the tool detects <code>src/content/*</code> and applies default thresholds.</div></li>
+        <li><div><b>Run.</b> <code>npx gates</code>. Terminal table, Markdown report in <code>.gates/</code>, JSON for CI. Exit code 1 when something must not ship.</div></li>
+      </ol>
+      <p style="margin-top:4mm"><b>See every gate fire first.</b> <code>npx @operstack/gates --demo</code> runs the fictional Isla Verde site that ships with the package: one deliberate defect per gate and one page that passes all fifteen.</p>
+      <p><b>Flags.</b> <code>--only 1,4,15</code> a subset. <code>--fix</code> characters only. <code>--offline</code> skips remote image checks. <code>--fail-on warn</code> for strict CI. <code>--json</code> for machines.</p>
+    </div>
+    <div>
+<pre>{
+  "siteUrl": "https://example.com",
+  "contentDir": "src/content",
+  "collections": {
+    "guides":   { "url": "/guides/",
+                  "minWords": 2000, "faq": 5,
+                  "commercial": true },
+    "projects": { "url": "/projects/",
+                  "minWords": 400,
+                  "kind": "entity" }
+  },
+  "currency": [{ "sign": "฿", "code": "THB" }],
+  "placeNames": ["bang tao", "kamala"],
+  "boilerplate": ["^this card records"],
+  "claims": { "allowedSources":
+    ["central bank", "land registry"] }
+}</pre>
+<pre><span class="dim"># .github/workflows/gates.yml</span>
+- run: npm run build
+- run: npx gates --fail-on warn</pre>
+    </div>
+  </div>
+<pre style="margin-top:2mm">  OperStack Gates
+  ------------------------------------------------------------------------
+  <span class="ok">OK  </span>  01 characters             corpus clean
+  <span class="ok">OK  </span>  02 mdx-compile            1660 file(s) compile
+  <span class="fail">FAIL</span>  03 frontmatter            59 issue(s)
+  <span class="fail">FAIL</span>  05 duplication            9 shared block(s) on 64 page(s), 30 near-duplicate
+  <span class="fail">FAIL</span>  06 shared-sentences       27 sentence(s) and 4 fragment(s) on 3+ pages
+  <span class="warn">WARN</span>  09 link-semantics         205 anchor(s) disagree with their target
+  <span class="fail">FAIL</span>  13 redirects              4 redirect problem(s) in 268 rules
+  <span class="fail">FAIL</span>  14 ai-index               4 disagreement(s) between public/llms.txt and the site
+  <span class="fail">FAIL</span>  15 claims                 156 unsourced figure(s)
+  ------------------------------------------------------------------------
+  pass 3  warn 3  fail 9  skip 0        <span class="dim">1,660 files, 12.9 s</span></pre>
+  <p class="muted" style="font-size:9pt">A real run on a production corpus, abridged. The findings are the site's homework for the month.</p>
+  <div class="callout">
+    <p><b>Tell the model before the gate tells you.</b> The package includes a rules file for Cursor and Claude Code (<code>rules/content-gates.md</code>). It states every rule the gates enforce, in the language a model follows, so the model stops producing what the gates reject.</p>
+  </div>
+  <div class="footer"><span>Fifteen gates</span><span>7</span></div>
+</section>
+
+<!-- 8. WHAT NEXT -->
+<section class="page">
+  <div class="eyebrow">What next</div>
+  <h2>When the gates find more than you can fix</h2>
+  <p class="lede">The gates are free and stay free. They came out of a pipeline that builds and runs content sites; the rest of that pipeline is available in three sizes.</p>
+  <table class="ladder">
+    <thead><tr><th>Step</th><th>What you get</th><th>Price</th></tr></thead>
+    <tbody>
+      <tr><td>Fifteen gates</td><td>The npm package, the rules file, this document, the fixture site. MIT licence, no account.</td><td class="price">Free</td></tr>
+      <tr><td>Site Kit</td><td>The full pipeline the gates came from: Astro templates, page generator, mass indexing, AI index, image handling, a demo market, the gates wired in, quick start and documentation.</td><td class="price">79 USD</td></tr>
+      <tr><td>SEO, AEO and GEO audit</td><td>We run the gates and eleven more checks on your site: search and answer-engine visibility, indexing, structure, trust. 18-page PDF with findings priced per fix. With Search Console access for the full data.</td><td class="price">249 / 349 USD</td></tr>
+      <tr><td>Fix packages</td><td>Fix, Foundation, Growth: the findings from the audit applied to your repository or CMS as reviewed changes, measured at 30, 60 and 90 days.</td><td class="price">from 600 USD</td></tr>
+    </tbody>
+  </table>
+  <div class="cols" style="margin-top:4mm">
+    <div>
+      <h3 style="margin-bottom:2mm">About OperStack</h3>
+      <p>OperStack builds the tooling behind a pipeline that publishes to eleven content sites in several languages, with leads arriving from search and from ChatGPT, Perplexity and Copilot referrals. Every product is a piece of that pipeline, cleaned of client data and packaged so that one person can run it.</p>
+    </div>
+    <div>
+      <h3 style="margin-bottom:2mm">Where to find it</h3>
+      <p>Package: <code>npx @operstack/gates</code><br>Source and issues: github.com/operstack/gates<br>Site Kit, audit, documentation: oper-stack.com<br>Mail: hello@oper-stack.com</p>
+      <p class="muted" style="font-size:9pt">The thresholds in the config are opinions from one pipeline. Tell us which ones are wrong for your corpus; that is more useful than defending them.</p>
+    </div>
+  </div>
+  <div class="footer"><span>OperStack, 2026, MIT</span><span>8</span></div>
+</section>
+
+</body>
+</html>

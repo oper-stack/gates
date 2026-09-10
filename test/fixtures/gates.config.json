@@ -1,0 +1,28 @@
+{
+  "root": ".",
+  "siteUrl": "https://isla-verde.example",
+  "contentDir": "src/content",
+  "buildDir": "dist/client",
+  "publicDir": "public",
+  "redirectsFile": "vercel.json",
+  "agentIndex": "public/llms.txt",
+  "reportDir": ".gates",
+  "collections": {
+    "guides":   { "url": "/guides/",   "minWords": 120, "faq": 2, "commercial": true },
+    "areas":    { "url": "/areas/",    "minWords": 60,  "faq": 0, "commercial": false },
+    "projects": { "url": "/projects/", "minWords": 30,  "faq": 0, "commercial": false, "kind": "entity" },
+    "news":     { "url": "/news/",     "minWords": 20,  "faq": 0, "commercial": false, "kind": "news" }
+  },
+  "requiredFrontmatter": ["title", "description", "pubDate", "author"],
+  "title": { "min": 40, "max": 60 },
+  "description": { "min": 70, "max": 160 },
+  "currency": [{ "sign": "₡", "code": "CRC" }],
+  "brandWords": ["guide", "review"],
+  "placeNames": ["playa norte", "playa sur", "puerto viejo", "cerro alto"],
+  "fillerPatterns": ["^Contact our team for details"],
+  "faqTemplates": ["^Yes, in most cases\\. Contact our team"],
+  "boilerplate": ["^this card records what the developer published"],
+  "imageHosts": ["res.cloudinary.com"],
+  "claims": { "enabled": true, "allowedSources": ["isla verde statistics office", "central bank of isla verde"] },
+  "failOn": "fail"
+}

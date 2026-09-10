@@ -1,0 +1,114 @@
+{
+  "$schema": "https://oper-stack.com/schemas/gates.config.json",
+  "siteUrl": "https://example.com",
+  "contentDir": "src/content",
+  "buildDir": "dist/client",
+  "publicDir": "public",
+  "redirectsFile": "vercel.json",
+  "agentIndex": "public/llms.txt",
+  "reportDir": ".gates",
+  "collections": {
+    "guides": {
+      "url": "/guides/",
+      "minWords": 2000,
+      "faq": 5,
+      "commercial": true
+    },
+    "areas": {
+      "url": "/areas/",
+      "minWords": 1800,
+      "faq": 4,
+      "commercial": true
+    },
+    "comparisons": {
+      "url": "/comparisons/",
+      "minWords": 1800,
+      "faq": 4,
+      "commercial": true
+    },
+    "projects": {
+      "url": "/projects/",
+      "minWords": 400,
+      "faq": 0,
+      "commercial": false,
+      "kind": "entity"
+    },
+    "news": {
+      "url": "/news/",
+      "minWords": 60,
+      "faq": 0,
+      "commercial": false,
+      "kind": "news"
+    }
+  },
+  "requiredFrontmatter": [
+    "title",
+    "description",
+    "pubDate",
+    "updatedDate",
+    "author",
+    "tags"
+  ],
+  "title": {
+    "min": 40,
+    "max": 60
+  },
+  "description": {
+    "min": 70,
+    "max": 160
+  },
+  "currency": [
+    {
+      "sign": "฿",
+      "code": "THB"
+    }
+  ],
+  "brandWords": [
+    "guide",
+    "review"
+  ],
+  "placeNames": [],
+  "fillerPatterns": [],
+  "faqTemplates": [],
+  "boilerplate": [
+    "^this page is a (data )?card, not a review",
+    "^figures are the developer's own and have not been verified"
+  ],
+  "imageHosts": [
+    "res.cloudinary.com",
+    "upload.wikimedia.org"
+  ],
+  "claims": {
+    "enabled": true,
+    "allowedSources": [
+      "national statistics office",
+      "central bank",
+      "land registry"
+    ]
+  },
+  "readability": {
+    "emDashPer500": 8,
+    "longSentence": 45,
+    "longSentenceCount": 5,
+    "longParagraph": 170,
+    "longParagraphCount": 3
+  },
+  "duplication": {
+    "minBlockWords": 12,
+    "minPages": 2,
+    "sentenceMinWords": 10,
+    "fragmentMinWords": 8,
+    "sentenceMinPages": 3
+  },
+  "links": {
+    "maxRepeatsPerPage": 3
+  },
+  "structure": {
+    "minH2": 4,
+    "minTableRows": 6,
+    "maxBold": 35,
+    "minInternalLinks": 5,
+    "minFacts": 8
+  },
+  "failOn": "fail"
+}

@@ -1,0 +1,3 @@
+#!/bin/sh
+# Fast subset before every commit: characters, compile, frontmatter, structure, hollow sections.
+npx gates --only 1,2,3,4,7 --offline || exit 1

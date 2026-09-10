@@ -1,0 +1,7 @@
+node_modules/
+.gates/
+test/fixtures/.gates/
+tmp/
+*.log
+*.tgz
+.DS_Store

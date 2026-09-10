@@ -1,0 +1,27 @@
+# Isla Verde
+
+> Buyer guides for condos and land on Isla Verde.
+
+## Guides
+
+- [Buying a Condo on Isla Verde](/guides/clean-guide/)
+- [Land Ownership Rules](/guides/dup-a/)
+- [Playa Norte or Cerro Alto](/guides/dup-b/)
+- [Document Checklist](/guides/dup-c/)
+- [Ghost page](/guides/ghost-page/)
+- [Draft mortgage rules](/guides/draft-page/)
+
+## Areas
+
+- [Playa Norte](/areas/playa-norte/)
+- [Playa Sur](/areas/playa-sur/)
+
+## Projects
+
+- [Marina Towers](/projects/marina-towers/)
+- [Cerro Vista](/projects/cerro-vista/)
+- [Puerto Lofts](/projects/puerto-lofts/)
+
+## News
+
+- [Registry fee change](/news/registry-fees-2026/)

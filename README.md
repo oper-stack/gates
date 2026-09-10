@@ -2,6 +2,8 @@
 
 Fifteen automated quality gates for content sites. One command, one config file, one report.
 
+<a href="https://www.producthunt.com/posts/operstack-gates?utm_source=badge-featured&utm_medium=badge" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1247096&theme=dark" alt="OperStack Gates on Product Hunt" width="250" height="54" /></a>
+
 ```
 npx @operstack/gates
 ```

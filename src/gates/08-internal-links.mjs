@@ -29,10 +29,32 @@ function loadRedirects(cfg) {
   } catch { return new Set(); }
 }
 
+/** Routes rendered on the server (Astro `prerender = false`) have no file in the build but exist at runtime. */
+function serverRoutes(cfg) {
+  const pages = resolve(cfg.root, 'src/pages');
+  if (!existsSync(pages)) return new Set();
+  const out = new Set();
+  const walkPages = (dir) => {
+    for (const e of readdirSync(dir, { withFileTypes: true })) {
+      const p = join(dir, e.name);
+      if (e.isDirectory()) { walkPages(p); continue; }
+      if (!/\.(astro|ts|js|mjs)$/.test(e.name)) continue;
+      let text; try { text = readFileSync(p, 'utf8'); } catch { continue; }
+      if (!/export\s+const\s+prerender\s*=\s*false/.test(text)) continue;
+      let route = '/' + relative(pages, p).replace(/\\/g, '/').replace(/\.(astro|ts|js|mjs)$/, '').replace(/(^|\/)index$/, '');
+      if (/\[/.test(route)) continue; // dynamic server routes cannot be enumerated
+      out.add(route.endsWith('/') ? route : `${route}/`);
+    }
+  };
+  walkPages(pages);
+  return out;
+}
+
 export async function run({ cfg, corpus }) {
   const findings = [];
   const dist = resolve(cfg.root, cfg.buildDir);
   const redirects = loadRedirects(cfg);
+  const ssr = serverRoutes(cfg);
   const site = (cfg.siteUrl || '').replace(/\/$/, '');
   if (existsSync(dist)) {
     const files = walk(dist);
@@ -51,7 +73,7 @@ export async function run({ cfg, corpus }) {
         if (/^https?:\/\//i.test(href)) { if (!site || !href.startsWith(site)) continue; href = href.slice(site.length) || '/'; }
         if (!href.startsWith('/') || skipExt.test(href)) continue;
         const clean = href.split('#')[0].split('?')[0];
-        if (!exists(href) && !redirects.has(clean) && !redirects.has(clean.replace(/\/$/, ''))) {
+        if (!exists(href) && !redirects.has(clean) && !redirects.has(clean.replace(/\/$/, '')) && !ssr.has(clean.endsWith('/') ? clean : `${clean}/`)) {
           (broken.get(href) || broken.set(href, new Set()).get(href)).add(relative(dist, file));
         }
       }

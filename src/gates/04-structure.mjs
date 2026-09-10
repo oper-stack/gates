@@ -13,9 +13,22 @@ export const BANNED_PHRASES = ['Regional diversification', 'Advanced investment 
 export const AI_FLUFF_RE = /\b(moreover|furthermore|in conclusion|it is important to note|unlock the potential|delve into|a testament to|not just .{1,40} but)\b/i;
 export const DRAFT_MARKERS_RE = /\[VERIFY\b|\*\*VERIFY:\*\*|Knowledge base|KB §|\bTODO\b|source needed|lorem ipsum/i;
 
-export function countNumericFacts(body) {
-  const hits = body.match(/\$[\d,]+(?:\.\d+)?|\d{1,3}(?:,\d{3})*(?:\.\d+)?\s*%|\d+\s*[–-]\s*\d+\s*%|\d{4}|\d+\s*(?:m²|sqm|sq ft|km|min|minutes|years?|months?)|\d{1,3}(?:,\d{3})+(?:\.\d+)?\s*(?:[A-Z]{3})?/gi);
-  return hits ? hits.length : 0;
+/**
+ * A numeric fact is a number with a unit a reader can act on: a price, a percentage,
+ * a year, a distance, a duration, an amount in a currency code. Bare numbers are not counted.
+ */
+export function countNumericFacts(body, currencyCodes = []) {
+  const codes = ['USD', 'EUR', 'GBP', ...currencyCodes.map((c) => c.toUpperCase())].filter((c, i, a) => a.indexOf(c) === i).join('|');
+  const re = new RegExp(
+    String.raw`[$€£]\s?\d[\d,]*(?:\.\d+)?` +
+      String.raw`|\d{1,3}(?:,\d{3})*(?:\.\d+)?\s*(?:%|percent|per cent)` +
+      String.raw`|\b(?:19|20)\d{2}\b` +
+      String.raw`|\d+(?:\.\d+)?\s*(?:m²|sqm|sq\s?m|sq ft|ha|km|metres?|meters?|min|minutes?|hours?|days?|nights?|weeks?|months?|years?)\b` +
+      String.raw`|\d[\d,]*(?:\.\d+)?\s*(?:${codes})\b` +
+      String.raw`|\d{1,3}(?:,\d{3})+(?:\.\d+)?`,
+    'gi',
+  );
+  return (body.match(re) || []).length;
 }
 
 function headingSkip(body) {
@@ -62,7 +75,7 @@ export async function run({ cfg, corpus }) {
       if (!/(pros|cons|advantages|disadvantages|плюс|минус|vorteile|nachteile|avantages|inconvénients)/i.test(body)) push('missing pros and cons');
       if (!/(risk|red flag|checklist|what to check|insider tip|риск|чеклист|risque|risiko)/i.test(body)) push('missing risks or checklist block');
       if (!/(scenario|who this is for|buyer profile|decision framework|сценари|для инвестор|szenario|profil)/i.test(body)) push('missing scenarios or decision framework');
-      const nums = countNumericFacts(body);
+      const nums = countNumericFacts(body, (cfg.currency || []).map((c) => c.code));
       const minNums = Math.max(S.minFacts, Math.floor((c.minWords || 2000) / 500) * 3);
       if (nums < minNums) push(`low fact density: ${nums} numeric facts, need ${minNums}`);
       const bold = (body.match(/\*\*[^*]+\*\*/g) || []).length;

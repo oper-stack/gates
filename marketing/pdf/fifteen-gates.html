@@ -16,6 +16,11 @@
   body { font-family: "IBM Plex Sans", "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 10.4pt; line-height: 1.5; }
   .page { width: 210mm; height: 297mm; padding: 18mm 17mm 16mm; page-break-after: always; position: relative; overflow: hidden; display: flex; flex-direction: column; }
   .page:last-child { page-break-after: auto; }
+  .page > * { flex-shrink: 0; }
+  .tight .gate { padding: 3mm 0; }
+  .tight .gate p { margin-bottom: 1mm; }
+  .tight .gate .ex { margin: 1mm 0 1.5mm; }
+  .tight h2 { margin-bottom: 3mm; }
   .footer { position: absolute; left: 17mm; right: 17mm; bottom: 9mm; display: flex; justify-content: space-between; font-size: 8pt; color: var(--slate); letter-spacing: .04em; text-transform: uppercase; }
   h1, h2, h3 { font-family: "Fraunces", "Iowan Old Style", Georgia, serif; font-weight: 600; margin: 0; text-wrap: balance; }
   h1 { font-size: 46pt; line-height: 1.02; letter-spacing: -.01em; }
@@ -179,7 +184,7 @@ hollow.mdx   1 table cell(s) holding only a comma</div>
 </section>
 
 <!-- 5. LINKS AND ROUTING -->
-<section class="page">
+<section class="page tight">
   <div class="eyebrow">Group three</div>
   <h2>Links and routing: usually one config change</h2>
   <p class="group-note">Five gates that fail quietly between deploys and are cheap to keep green once the pipeline generates the right files.</p>
@@ -207,7 +212,7 @@ bad-links.mdx   anchor is an entity name but links elsewhere: [Marina Towers](/g
 
   <div class="gate"><div class="num">13</div><div>
     <div class="head"><h3>Redirects</h3><span class="chip fail">fail</span></div>
-    <p><span class="lbl">Failure</span>A merged into B, then B into C. Search engines follow two hops grudgingly and three not at all. A page whose source still existed was redirected away and sent every visitor elsewhere.</p>
+    <p><span class="lbl">Failure</span>A merged into B, then B into C. Search engines follow two hops grudgingly and three not at all. A page that still existed was redirected away.</p>
     <div class="ex">cycle: /old-a -&gt; /old-b -&gt; /old-a
 chain of 3: /x1 -&gt; /x2 -&gt; /x3 (point the first source at the final target)
 live page /guides/bad-meta/ is redirected away</div>
@@ -271,7 +276,7 @@ bad-claims.mdx   nightly rate without a source: "$140 per night"</div>
         <li><div><b>Run.</b> <code>npx gates</code>. Terminal table, Markdown report in <code>.gates/</code>, JSON for CI. Exit code 1 when something must not ship.</div></li>
       </ol>
       <p style="margin-top:4mm"><b>See every gate fire first.</b> <code>npx @operstack/gates --demo</code> runs the fictional Isla Verde site that ships with the package: one deliberate defect per gate and one page that passes all fifteen.</p>
-      <p><b>Flags.</b> <code>--only 1,4,15</code> a subset. <code>--fix</code> characters only. <code>--offline</code> skips remote image checks. <code>--fail-on warn</code> for strict CI. <code>--json</code> for machines.</p>
+      <p><b>Flags.</b> <code>--only 1,4,15</code>, <code>--fix</code>, <code>--offline</code>, <code>--fail-on warn</code>, <code>--json</code>.</p>
     </div>
     <div>
 <pre>{
@@ -296,7 +301,7 @@ bad-claims.mdx   nightly rate without a source: "$140 per night"</div>
 - run: npx gates --fail-on warn</pre>
     </div>
   </div>
-<pre style="margin-top:2mm">  OperStack Gates
+<pre style="margin-top:2mm; font-size:8.2pt">  OperStack Gates
   ------------------------------------------------------------------------
   <span class="ok">OK  </span>  01 characters             corpus clean
   <span class="ok">OK  </span>  02 mdx-compile            1660 file(s) compile

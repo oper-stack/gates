@@ -82,7 +82,7 @@ One Markdown file, drop it into `.cursor/rules/` or `CLAUDE.md`. It states every
 - **Fifteen gates and the rules file.** Free. This page.
 - **The 8-page PDF.** Free for an email: each gate, the failure it was written for, the fix.
 - **Site Kit, 79 USD.** The full pipeline the gates came from: Astro templates, page generator, indexing, AI index, image handling, a demo market, and the gates wired in.
-- **SEO, AEO and GEO audit, 249 USD.** We run the gates and eleven more checks on your site, with Search Console access 349 USD. 18-page PDF, fix packages priced per finding.
+- **SEO, AEO and GEO audit, 149 USD for the first ten, then 249.** Forty checks across six areas, every score computed from the checks and printed with the count behind it. With read-only access to your own free Search Console it is 199 USD. Twelve-page PDF. Afterwards: Fix at 249 USD against a list agreed before payment, or Foundation from 500 USD.
 
 ## FAQ (section)
 

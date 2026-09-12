@@ -46,7 +46,7 @@ Every content site that grows past a few hundred pages accumulates the same debt
 
 Search engines call the third one scaled content abuse. Answer engines quietly stop citing you after the sixth. Buyers leave after the seventh.
 
-These gates were built while running a pipeline that publishes to eleven content sites. Every check exists because that specific failure shipped at least once. The package extracts the checks, drops every site-specific string into a config file, and gives you the same fifteen gates in one command.
+These gates were built while running a pipeline that publishes to eleven content sites. Every check exists because that specific failure shipped at least once. The package extracts the checks, drops every site-specific string into a config file, and gives you the same sixteen gates in one command.
 
 ## Quick start
 
@@ -87,7 +87,7 @@ These gates were built while running a pipeline that publishes to eleven content
    npx @operstack/gates --demo
    ```
 
-## The fifteen gates
+## The sixteen gates
 
 | # | Gate | What it catches | Level |
 |---|---|---|---|
@@ -215,3 +215,17 @@ The fixture site is fictional. Every number in it is invented for the test.
 ## License
 
 MIT. Built by OperStack.
+
+## Gate 16, the agent surface
+
+**In plain words.** Assistants are starting to read two small files to work out what a site is: an
+agent card at `/.well-known/agent.json`, and a markdown copy of each page for when HTML gets in the
+way. Both are easy to add once and easy to lose without noticing, because no human ever opens those
+URLs. This gate opens them for you on every build.
+
+**What it does.** Missing entirely is a warning: the standards are early and optional. Broken is a
+failure: a card that is not valid JSON or is missing its name, description or URL, and pages with no
+markdown rendition **while other pages have one**, which means the thing worked and quietly stopped.
+
+It found real drift the day it was written: a 1,350-page site had markdown for almost every page and
+none for five, and another had it for twenty pages and none for its services section.

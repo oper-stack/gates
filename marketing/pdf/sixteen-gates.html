@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Fifteen Gates</title>
+<title>Sixteen Gates</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
@@ -73,12 +73,12 @@
 <section class="page">
   <div class="cover-top">
     <div class="eyebrow">OperStack</div>
-    <h1>Fifteen gates</h1>
+    <h1>Sixteen gates</h1>
     <p class="lede" style="margin-top:6mm">The checks a content site must pass before it ships, in the order they run, with the failure each one was written for and the fix. Free, open source, one command.</p>
     <p class="cmd" style="margin-top:6mm">npx @operstack/gates</p>
     <div class="cover-stats">
       <div class="stat"><b>1,660</b><span>MDX files in one real run</span></div>
-      <div class="stat"><b>13 s</b><span>for all fifteen gates on a laptop</span></div>
+      <div class="stat"><b>13 s</b><span>for all sixteen gates on a laptop</span></div>
       <div class="stat"><b>11</b><span>content sites the gates were built on</span></div>
     </div>
   </div>
@@ -101,9 +101,9 @@
     <li><div><b>"7.5% net yield" that nobody ever sourced.</b><span class="muted">On 70 pages. Buyers who did the maths did not come back.</span></div></li>
   </ol>
   <div class="callout" style="margin-top:6mm">
-    <p><b>How to read this document.</b> Pages 3 to 6 walk through the fifteen gates in four groups: mechanical, corpus debt, links and routing, trust. Page 7 shows how to run them. Page 8 shows what to do when they find more than you can fix.</p>
+    <p><b>How to read this document.</b> Pages 3 to 6 walk through the sixteen gates in four groups: mechanical, corpus debt, links and routing, trust. Page 7 shows how to run them. Page 8 shows what to do when they find more than you can fix.</p>
   </div>
-  <div class="footer"><span>Fifteen gates</span><span>2</span></div>
+  <div class="footer"><span>Sixteen gates</span><span>2</span></div>
 </section>
 
 <!-- 3. MECHANICAL -->
@@ -145,7 +145,7 @@ bad-structure.mdx   heading level skip H2 to H4 at line 12
 bad-structure.mdx   draft or source marker left in text ([VERIFY], TODO, source needed)</div>
     <p><span class="lbl">Fix</span>Answer-first block, four H2s, six table rows, the FAQ count the collection needs, pros and cons, risks, scenarios, three numeric facts per 500 words, five internal links. Thresholds live in the config.</p>
   </div></div>
-  <div class="footer"><span>Fifteen gates</span><span>3</span></div>
+  <div class="footer"><span>Sixteen gates</span><span>3</span></div>
 </section>
 
 <!-- 4. CORPUS DEBT -->
@@ -180,7 +180,7 @@ hollow.mdx   numbered list or steps start above 1
 hollow.mdx   1 table cell(s) holding only a comma</div>
     <p><span class="lbl">Fix</span>Write the section or delete the heading. A heading that promises and delivers nothing costs more than no heading.</p>
   </div></div>
-  <div class="footer"><span>Fifteen gates</span><span>4</span></div>
+  <div class="footer"><span>Sixteen gates</span><span>4</span></div>
 </section>
 
 <!-- 5. LINKS AND ROUTING -->
@@ -226,7 +226,7 @@ index lists noindex page /guides/draft-page/
 indexable page missing from the index: /guides/bad-structure/</div>
     <p><span class="lbl">Fix</span>Generate the index from the corpus in the build. Run the gate after the build.</p>
   </div></div>
-  <div class="footer"><span>Fifteen gates</span><span>5</span></div>
+  <div class="footer"><span>Sixteen gates</span><span>5</span></div>
 </section>
 
 <!-- 6. TRUST -->
@@ -258,10 +258,18 @@ bad-claims.mdx   nightly rate without a source: "$140 per night"</div>
     <p><span class="lbl">Fix</span>Name the source in the same paragraph, turn the figure into an example with stated assumptions, or delete it. This is the gate that takes days, and the one that decides whether the site is believed.</p>
   </div></div>
 
+  <div class="gate"><div class="num">16</div><div>
+    <div class="head"><h3>Agent surface</h3><span class="chip warn">warn</span></div>
+    <p><span class="lbl">Failure</span>A site published an agent card and markdown copies of its pages, then renamed a collection. The copies stopped being generated. Nobody noticed for two months: no human opens those URLs.</p>
+    <div class="ex">no .well-known/agent.json: an agent directory has nothing to read about this site
+/guides/buying-costs/   page has no markdown rendition while 17 other page(s) do</div>
+    <p><span class="lbl">How</span>Two files an assistant looks for: the agent card at <code>/.well-known/agent.json</code> and a markdown rendition of each page. Both standards are early, so a missing file is a warning. A card that is broken JSON, or markdown that exists for some pages and not others, is a failure: that is not an early standard, that is something that used to work and quietly stopped.</p>
+  </div></div>
+
   <div class="callout">
-    <p><b>Fix in order.</b> Gates 01 to 04 take minutes. Gates 05 to 07 hold the corpus debt. Gates 08 to 14 are usually one change in the pipeline. Gate 15 is editorial work.</p>
+    <p><b>Fix in order.</b> Gates 01 to 04 take minutes. Gates 05 to 07 hold the corpus debt. Gates 08 to 14 are usually one change in the pipeline. Gate 15 is editorial work, and gate 16 is two files you publish once.</p>
   </div>
-  <div class="footer"><span>Fifteen gates</span><span>6</span></div>
+  <div class="footer"><span>Sixteen gates</span><span>6</span></div>
 </section>
 
 <!-- 7. RUN IT -->
@@ -275,8 +283,8 @@ bad-claims.mdx   nightly rate without a source: "$140 per night"</div>
         <li><div><b>Describe the site.</b> One JSON file at the project root. Or skip it: the tool detects <code>src/content/*</code> and applies default thresholds.</div></li>
         <li><div><b>Run.</b> <code>npx gates</code>. Terminal table, Markdown report in <code>.gates/</code>, JSON for CI. Exit code 1 when something must not ship.</div></li>
       </ol>
-      <p style="margin-top:4mm"><b>See every gate fire first.</b> <code>npx @operstack/gates --demo</code> runs the fictional Isla Verde site that ships with the package: one deliberate defect per gate and one page that passes all fifteen.</p>
-      <p><b>Flags.</b> <code>--only 1,4,15</code>, <code>--fix</code>, <code>--offline</code>, <code>--fail-on warn</code>, <code>--json</code>.</p>
+      <p style="margin-top:4mm"><b>See every gate fire first.</b> <code>npx @operstack/gates --demo</code> runs the fictional Isla Verde site that ships with the package: one deliberate defect per gate and one page that passes all sixteen.</p>
+      <p><b>Flags.</b> <code>--only 1,4,16</code>, <code>--fix</code>, <code>--offline</code>, <code>--fail-on warn</code>, <code>--json</code>.</p>
     </div>
     <div>
 <pre>{
@@ -318,7 +326,7 @@ bad-claims.mdx   nightly rate without a source: "$140 per night"</div>
   <div class="callout">
     <p><b>Tell the model before the gate tells you.</b> The package includes a rules file for Cursor and Claude Code (<code>rules/content-gates.md</code>). It states every rule the gates enforce, in the language a model follows, so the model stops producing what the gates reject.</p>
   </div>
-  <div class="footer"><span>Fifteen gates</span><span>7</span></div>
+  <div class="footer"><span>Sixteen gates</span><span>7</span></div>
 </section>
 
 <!-- 8. WHAT NEXT -->
@@ -329,7 +337,7 @@ bad-claims.mdx   nightly rate without a source: "$140 per night"</div>
   <table class="ladder">
     <thead><tr><th>Step</th><th>What you get</th><th>Price</th></tr></thead>
     <tbody>
-      <tr><td>Fifteen gates</td><td>The npm package, the rules file, this document, the fixture site. MIT licence, no account.</td><td class="price">Free</td></tr>
+      <tr><td>Sixteen gates</td><td>The npm package, the rules file, this document, the fixture site. MIT licence, no account.</td><td class="price">Free</td></tr>
       <tr><td>Site Kit</td><td>The full pipeline the gates came from: Astro templates, page generator, mass indexing, AI index, image handling, a demo market, the gates wired in, quick start and documentation.</td><td class="price">79 USD</td></tr>
       <tr><td>SEO, AEO and GEO audit</td><td>We run the gates and eleven more checks on your site: search and answer-engine visibility, indexing, structure, trust. 18-page PDF with findings priced per fix. With Search Console access for the full data.</td><td class="price">249 / 349 USD</td></tr>
       <tr><td>Fix packages</td><td>Fix, Foundation, Growth: the findings from the audit applied to your repository or CMS as reviewed changes, measured at 30, 60 and 90 days.</td><td class="price">from 600 USD</td></tr>

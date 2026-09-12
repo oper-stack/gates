@@ -3,6 +3,12 @@
  * into a corpus: currency signs that should be spelled as a code (configurable),
  * decorative pictographs and emoji in body copy, and typographic em and en dashes.
  * With --fix it rewrites currency signs and pictographs; dashes stay for a human.
+ *
+ * Pictographs are judged in body copy only. Inside a fenced code block the same
+ * characters are content rather than decoration: an ASCII decision tree drawn with
+ * box characters is a diagram, and deleting its lines would destroy the drawing.
+ * Currency and dashes are still checked everywhere, because those are our own prose
+ * wherever they appear.
  */
 import { writeFileSync } from 'node:fs';
 import { result } from '../report.mjs';
@@ -21,10 +27,18 @@ function fixCurrency(text, sign, code) {
   return t.replace(new RegExp(`${code}[  ]+${code}`, 'g'), code).replace(/\|[  ]{2,}/g, '| ');
 }
 
+/** Строка, открывающая или закрывающая блок кода: ``` или ~~~ с любым языком после. */
+const FENCE = /^\s{0,3}(```|~~~)/;
+
 function fixPicto(text) {
-  let t = text.replace(/✅/g, '✓').replace(/❌/g, '✗');
-  t = t.replace(PICTO, (ch) => (KEEP.has(ch) ? ch : ''));
-  return t.replace(/[ \t]{2,}/g, ' ').replace(/\|[ \t]{2,}/g, '| ').replace(/[ \t]+$/gm, '');
+  let inFence = false;
+  return text.split('\n').map((line) => {
+    if (FENCE.test(line)) { inFence = !inFence; return line; }
+    if (inFence) return line;
+    let t = line.replace(/✅/g, '✓').replace(/❌/g, '✗');
+    t = t.replace(PICTO, (ch) => (KEEP.has(ch) ? ch : ''));
+    return t.replace(/[ \t]{2,}/g, ' ').replace(/\|[ \t]{2,}/g, '| ').replace(/[ \t]+$/, '');
+  }).join('\n');
 }
 
 export const id = 1;
@@ -38,10 +52,12 @@ export async function run({ cfg, corpus, flags }) {
   for (const f of corpus) {
     const lines = f.raw.split('\n');
     let touched = false;
+    let inFence = false;
     lines.forEach((line, i) => {
+      if (FENCE.test(line)) inFence = !inFence;
       for (const c of signs) if (line.includes(c.sign)) { currencyLines++; touched = true; findings.push({ file: f.rel, line: i + 1, message: `currency sign ${c.sign}: spell it ${c.code}` }); }
       if (/[\u2014\u2013]/.test(line)) { dashLines++; findings.push({ file: f.rel, line: i + 1, message: 'em or en dash: use a comma, a colon, parentheses or a hyphen in ranges' }); }
-      const bad = [...line.matchAll(PICTO)].map((m) => m[0]).filter((ch) => !KEEP.has(ch) && ch !== '\uFE0F' && ch !== '\u200D');
+      const bad = inFence ? [] : [...line.matchAll(PICTO)].map((m) => m[0]).filter((ch) => !KEEP.has(ch) && ch !== '\uFE0F' && ch !== '\u200D');
       if (bad.length) { pictoLines++; touched = true; findings.push({ file: f.rel, line: i + 1, message: `decorative pictograph ${[...new Set(bad)].join(' ')}` }); }
     });
     if (flags.fix && touched) {

@@ -1,6 +1,6 @@
 {
   "name": "@operstack/gates",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "15 automated quality gates for content sites: characters, MDX compile, frontmatter, structure, duplication, shared sentences, hollow sections, internal links, link semantics, meta, readability, images, redirects, AI index, unsourced claims.",
   "type": "module",
   "bin": {

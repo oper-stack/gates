@@ -33,6 +33,9 @@ const EXPECT = [
   [13, 'fail', ['cycle: /old-a -> /old-b -> /old-a', 'chain of 3', 'live page /guides/bad-meta/ is redirected away']],
   [14, 'fail', ['does not exist: /guides/ghost-page/', 'lists noindex page /guides/draft-page/', 'missing from the index: /guides/bad-structure/']],
   [15, 'fail', ['7.5% net yield', '$140 per night']],
+  // Гейт 16: карточка агента на месте, а markdown есть ровно у одной страницы. Значит приём
+  // применён, и отсутствие у остальных это поломка, а не осознанный выбор.
+  [16, 'fail', ['has no markdown rendition']],
 ];
 // substrings that must NOT appear in any finding of the given gate
 const FORBID = [
@@ -66,7 +69,7 @@ for (const [id, needles] of FORBID) {
   }
 }
 const cleanHits = results.flatMap((r) => r.findings.filter((f) => `${f.file || ''} ${f.message}`.includes('clean-guide.mdx')).map((f) => `gate ${r.id}: ${f.message}`));
-if (cleanHits.length) { for (const h of cleanHits) fail(`clean page flagged: ${h}`); } else ok('clean-guide.mdx passes all 15 gates');
+if (cleanHits.length) { for (const h of cleanHits) fail(`clean page flagged: ${h}`); } else ok('clean-guide.mdx passes all 16 gates');
 
 // --fix on a temporary copy
 const tmp = mkdtempSync(join(tmpdir(), 'gates-fix-'));

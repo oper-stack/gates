@@ -7,6 +7,7 @@ export const GATES = [
   '01-characters', '02-mdx-compile', '03-frontmatter', '04-structure', '05-duplication',
   '06-shared-sentences', '07-empty-sections', '08-internal-links', '09-link-semantics', '10-meta',
   '11-readability', '12-images', '13-redirects', '14-agent-index', '15-claims',
+  '16-agent-surface',
 ];
 
 export async function runGates(cfg, flags = {}) {

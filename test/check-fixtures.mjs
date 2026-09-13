@@ -6,12 +6,13 @@
  *   3. allowed boilerplate and same-shaped tables are not reported as duplication,
  *   4. --fix rewrites currency signs and pictographs on a temporary copy.
  */
-import { cpSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { cpSync, mkdtempSync, readFileSync, readdirSync, rmSync, statSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadConfig } from '../src/config.mjs';
 import { runGates } from '../src/runner.mjs';
+import { isExampleUrl, inPlaceholder } from '../src/gates/12-images.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const fixtures = resolve(here, 'fixtures');
@@ -70,6 +71,49 @@ for (const [id, needles] of FORBID) {
 }
 const cleanHits = results.flatMap((r) => r.findings.filter((f) => `${f.file || ''} ${f.message}`.includes('clean-guide.mdx')).map((f) => `gate ${r.id}: ${f.message}`));
 if (cleanHits.length) { for (const h of cleanHits) fail(`clean page flagged: ${h}`); } else ok('clean-guide.mdx passes all 16 gates');
+
+// Гейт 12 не должен ходить по примерам: подсказка в поле ввода и домены из RFC 2606
+// не существуют намеренно, а раньше давали ложный провал на живом сайте.
+const ph = 'placeholder="https://your-site.com/logo.svg"';
+if (!inPlaceholder(ph, ph.indexOf('https://'))) fail('gate 12: адрес внутри placeholder не распознан');
+else ok('gate 12: подсказка в поле ввода не считается картинкой');
+if (inPlaceholder('<img src="https://cdn.example.net/a.png">', 10)) fail('gate 12: обычный src принят за placeholder');
+else ok('gate 12: обычный src по-прежнему проверяется');
+for (const u of ['https://your-site.com/logo.svg', 'https://example.com/a.png', 'https://cdn.example.org/b.jpg', 'https://foo.test/c.png']) {
+  if (!isExampleUrl(u)) fail(`gate 12: пример ${u} не распознан как пример`);
+}
+ok('gate 12: домены-примеры не проверяются');
+if (isExampleUrl('https://res.cloudinary.com/demo/image/upload/a.jpg')) fail('gate 12: настоящий адрес принят за пример');
+else ok('gate 12: настоящие адреса по-прежнему проверяются');
+
+// И то же самое через сам гейт, а не через предикаты. Ожидаемое число считаем по самим
+// фикстурам, чтобы проверка не ломалась от каждой новой картинки: в них должно быть
+// столько собранных адресов, сколько там не-примеров.
+{
+  const isImg = (u) => /\.(jpe?g|png|webp|gif|svg|avif)(\?|$)/i.test(u) || /cloudinary\.com\/.+\/image\/upload\//.test(u) || /wikimedia|unsplash/.test(u);
+  const walkAll = (dir, out = []) => {
+    for (const n of readdirSync(dir)) {
+      if (n === 'node_modules' || n.startsWith('.')) continue;
+      const fp = join(dir, n);
+      if (statSync(fp).isDirectory()) walkAll(fp, out);
+      else if (/\.(astro|mdx|md|ts|tsx|js|mjs|json)$/.test(n)) out.push(fp);
+    }
+    return out;
+  };
+  let expected = 0; let examples = 0;
+  for (const fp of walkAll(join(fixtures, 'src'))) {
+    const t = readFileSync(fp, 'utf8');
+    for (const m of t.matchAll(/https?:\/\/[^\s"'`)>\]]+/g)) {
+      const u = m[0].replace(/[.,;]+$/, '');
+      if (!isImg(u) || u.includes('${')) continue;
+      if (isExampleUrl(u) || inPlaceholder(t, m.index)) examples += 1; else expected += 1;
+    }
+  }
+  const remote = byId.get(12)?.stats?.remote;
+  if (examples < 2) fail(`gate 12: в фикстурах не осталось примеров для проверки (нашли ${examples})`);
+  else if (remote !== expected) fail(`gate 12: гейт собрал ${remote} адрес(ов), а не-примеров в фикстурах ${expected}`);
+  else ok(`gate 12: собрано ${remote} настоящих адрес(ов), ${examples} примера отсеяно`);
+}
 
 // --fix on a temporary copy
 const tmp = mkdtempSync(join(tmpdir(), 'gates-fix-'));

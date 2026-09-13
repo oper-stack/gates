@@ -21,6 +21,14 @@ function walk(dir, out = []) {
 
 const isImageUrl = (u) => /\.(jpe?g|png|webp|gif|svg|avif)(\?|$)/i.test(u) || /cloudinary\.com\/.+\/image\/upload\//.test(u) || /wikimedia|unsplash/.test(u);
 
+// Пример в поле ввода браузер никогда не загружает, а домены из RFC 2606 и типовые
+// заглушки вроде your-site.com не существуют намеренно. Проверять их бессмысленно:
+// гейт падал на подсказке placeholder="https://your-site.com/logo.svg".
+const EXAMPLE_HOST = /^(?:[\w-]+\.)*(?:example\.(?:com|net|org)|your-site\.com|your-domain\.com|yoursite\.com|site\.com)$|\.(?:test|invalid|localhost|example)$/i;
+export const isExampleUrl = (u) => { try { return EXAMPLE_HOST.test(new URL(u).hostname); } catch { return false; } };
+/** Стоит ли URL значением атрибута placeholder: такой адрес показывают человеку, а не грузят. */
+export const inPlaceholder = (text, index) => /placeholder\s*=\s*["'`]$/.test(text.slice(Math.max(0, index - 24), index));
+
 async function head(url) {
   const c = new AbortController(); const t = setTimeout(() => c.abort(), 12000);
   try { const r = await fetch(url, { method: 'HEAD', redirect: 'follow', signal: c.signal }); return r.status; }
@@ -36,6 +44,7 @@ export async function run({ cfg, corpus, flags }) {
     for (const m of text.matchAll(/https?:\/\/[^\s"'`)>\]]+/g)) {
       const u = m[0].replace(/[.,;]+$/, '');
       if (!isImageUrl(u) || u.includes('${')) continue;
+      if (isExampleUrl(u) || inPlaceholder(text, m.index)) continue;
       (map.get(u) || map.set(u, new Set()).get(u)).add(file.replace(cfg.root + '/', ''));
     }
     for (const m of text.matchAll(/(?:heroImage|image|src):\s*["'](\/[^"']+\.(?:jpe?g|png|webp|gif|svg|avif))["']/g)) {

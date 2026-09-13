@@ -2,16 +2,16 @@
 
 **Name:** OperStack Gates
 
-**Tagline (60 chars max):** 15 quality gates for content sites, one command, free
+**Tagline (60 chars max):** 16 quality gates for content sites, one command, free
 
 **Description (260 chars max):**
-Fifteen automated checks for MDX content sites: cut titles, copied paragraphs with swapped numbers, hollow sections, dead links, stale llms.txt, unsourced figures. One config file, 13 seconds on 1,660 pages. MIT, no account, npx and go.
+Sixteen automated checks for MDX content sites: cut titles, copied paragraphs with swapped numbers, hollow sections, dead links, stale llms.txt, unsourced figures. One config file, 13 seconds on 1,660 pages. MIT, no account, npx and go.
 
 **Topics:** SEO, Developer Tools, Open Source, Writing, Marketing
 
 **First comment (maker):**
 
-Hi everyone. I run a pipeline that publishes to eleven content sites, some of them past a thousand pages. Every one of these fifteen checks exists because that exact defect shipped at least once and the build log said nothing.
+Hi everyone. I run a pipeline that publishes to eleven content sites, some of them past a thousand pages. Every one of these sixteen checks exists because that exact defect shipped at least once and the build log said nothing.
 
 The one that hurt most: 121 pages sharing a closing paragraph with the numbers swapped. My duplicate checker compared exact strings, so it never saw it. Google's spam policy has a name for that pattern.
 

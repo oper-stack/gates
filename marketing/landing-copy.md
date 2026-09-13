@@ -1,6 +1,6 @@
 # oper-stack.com/gates: landing page copy
 
-Working title of the page: **Fifteen gates**
+Working title of the page: **Sixteen gates**
 
 ## Hero
 
@@ -8,7 +8,7 @@ Working title of the page: **Fifteen gates**
 
 **Headline:** Your content site has defects the build log will never show you.
 
-**Subhead:** Fifteen automated gates for MDX content sites: cut titles, copied paragraphs, hollow sections, dead links, stale AI index, unsourced figures. One command, one config file, thirteen seconds on 1,660 pages.
+**Subhead:** Sixteen automated gates for MDX content sites: cut titles, copied paragraphs, hollow sections, dead links, stale AI index, unsourced figures, a missing agent surface. One command, one config file, thirteen seconds on 1,660 pages.
 
 **Primary button:** `npx @operstack/gates`  (copies the command)
 
@@ -45,7 +45,7 @@ Working title of the page: **Fifteen gates**
 2. **Describe your site.** One JSON file: collections, word minimums, currency codes, place names, allowed sources. Or skip it and let the tool detect `src/content/*`.
 3. **Run.** `npx gates`. Terminal table, Markdown report, JSON for CI. Exit code 1 when something must not ship.
 
-## The fifteen gates (section)
+## The sixteen gates (section)
 
 Four groups, in the order they run.
 
@@ -79,7 +79,7 @@ One Markdown file, drop it into `.cursor/rules/` or `CLAUDE.md`. It states every
 
 **Heading:** When the gates find more than you can fix
 
-- **Fifteen gates and the rules file.** Free. This page.
+- **Sixteen gates and the rules file.** Free. This page.
 - **The 8-page PDF.** Free for an email: each gate, the failure it was written for, the fix.
 - **Site Kit, 79 USD.** The full pipeline the gates came from: Astro templates, page generator, indexing, AI index, image handling, a demo market, and the gates wired in.
 - **SEO, AEO and GEO audit, 149 USD for the first ten, then 249.** Forty checks across six areas, every score computed from the checks and printed with the count behind it. With read-only access to your own free Search Console it is 199 USD. Twelve-page PDF. Afterwards: Fix at 249 USD against a list agreed before payment, or Foundation from 500 USD.
@@ -92,7 +92,7 @@ One Markdown file, drop it into `.cursor/rules/` or `CLAUDE.md`. It states every
 
 **Is the fixture data real?** No. The demo site "Isla Verde" is fictional; every number is invented for the tests. Run it with `npx @operstack/gates --demo`.
 
-**Why fifteen?** Because the sixteenth failure has not shipped yet.
+**Why sixteen?** Because the seventeenth failure has not shipped yet.
 
 ## Footer CTA
 

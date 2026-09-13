@@ -2,11 +2,11 @@
 
 **Repository name:** operstack/gates
 
-**Description (350 chars):** Fifteen automated quality gates for MDX content sites: characters, compile, frontmatter, structure, duplication, shared sentences, hollow sections, internal links, link semantics, meta, readability, images, redirects, llms.txt, unsourced claims. One config, one command, CI-ready.
+**Description (350 chars):** Sixteen automated quality gates for MDX content sites: characters, compile, frontmatter, structure, duplication, shared sentences, hollow sections, internal links, link semantics, meta, readability, images, redirects, llms.txt, unsourced claims, agent surface. One config, one command, CI-ready.
 
 **Topics:** seo, aeo, geo, astro, mdx, content-quality, programmatic-seo, llms-txt, site-audit, static-site, cli
 
-**Social preview text:** 15 gates. 1 command. 13 seconds on 1,660 pages.
+**Social preview text:** 16 gates. 1 command. 13 seconds on 1,660 pages.
 
 **Release note for v0.1.0:** copy CHANGELOG.md.
 
@@ -14,13 +14,13 @@
 
 # Show HN
 
-**Title:** Show HN: Fifteen quality gates for MDX content sites (finds copied paragraphs with swapped numbers)
+**Title:** Show HN: Sixteen quality gates for MDX content sites (finds copied paragraphs with swapped numbers)
 
 **Text:**
 
 I publish to eleven content sites from one pipeline. Over two years the same defects kept shipping past the build: titles cut on a stop word, an H2 with nothing under it, one paragraph on 121 pages with different numbers, llms.txt advertising pages that redirect, yield figures nobody sourced.
 
-This package is the fifteen checks I ended up writing, with every site-specific string moved into one JSON config. It runs on 1,660 MDX files in about 13 seconds. The interesting parts are gate 05 (paragraph comparison with digits masked, which is how templated content gets caught), gate 08 (every href in the built HTML resolved against the build and the redirects file) and gate 15 (figures without a named source or example framing in the same paragraph).
+This package is the sixteen checks I ended up writing, with every site-specific string moved into one JSON config. It runs on 1,660 MDX files in about 13 seconds. The interesting parts are gate 05 (paragraph comparison with digits masked, which is how templated content gets caught), gate 08 (every href in the built HTML resolved against the build and the redirects file) and gate 15 (figures without a named source or example framing in the same paragraph).
 
 MIT. `npx @operstack/gates`. There is a fictional fixture site in the repo so you can see every gate fire before pointing it at your own content.
 
@@ -50,7 +50,7 @@ What I would like to know: which thresholds are wrong for your corpus, and which
 
 I run a pipeline that publishes to eleven content sites. For two years the same defects shipped past the build log: cut titles, empty sections, one paragraph on 121 pages with the numbers swapped, an AI index advertising pages that no longer existed.
 
-I turned the checks that caught them into a free tool. Fifteen gates, one config file, one command. It runs on 1,660 pages in 13 seconds and tells you what must not ship.
+I turned the checks that caught them into a free tool. Sixteen gates, one config file, one command. It runs on 1,660 pages in 13 seconds and tells you what must not ship.
 
 It is open source under MIT. If you generate content at scale, with or without a model, run it before your next deploy: npx @operstack/gates
 
@@ -68,7 +68,7 @@ The thresholds are in one JSON file. I would rather hear which ones are wrong fo
 
 # Dev.to / Hashnode article outline
 
-**Title:** Fifteen gates: what I check before a content site ships, and why each one exists
+**Title:** Sixteen gates: what I check before a content site ships, and why each one exists
 
 1. The seven silent failures (one paragraph each, with the real anonymised story).
 2. Why exact-match dedupe is not enough (gate 05, digits masked; gate 06, sentence level).

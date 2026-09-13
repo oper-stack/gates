@@ -13,7 +13,7 @@ The post goes live at 00:01 Pacific, 04:01 in Argentina. Product Hunt ranks by v
 
 ## Message to friends and contacts (Monday)
 
-Hi, tomorrow at 04:00 Argentina time I launch a free tool on Product Hunt: fifteen automatic checks for content sites, the ones we use on our own sites. If you have five minutes tomorrow, have a look and leave a comment with a question or an opinion, it helps more than a vote. Link: https://www.producthunt.com/posts/operstack-gates
+Hi, tomorrow at 04:00 Argentina time I launch a free tool on Product Hunt: sixteen automatic checks for content sites, the ones we use on our own sites. If you have five minutes tomorrow, have a look and leave a comment with a question or an opinion, it helps more than a vote. Link: https://www.producthunt.com/posts/operstack-gates
 
 ## Replies to the comments that always come
 
@@ -28,7 +28,7 @@ A linter reads one file. The gates read the corpus: gate 05 compares paragraphs 
 **"Does it work with Next.js / Hugo / WordPress?"**
 Any folder of Markdown or MDX files with frontmatter. Astro gets the deepest support (the exact link check needs a static build). WordPress: not directly; export to Markdown first, or run the free AI visibility check on the live site instead: https://oper-stack.com/ai-visibility/
 
-**"Why fifteen? Feels arbitrary."**
+**"Why sixteen? Feels arbitrary."**
 It is exactly the number of defects that shipped on our sites and cost something. The thresholds live in one JSON file, and I would rather hear which ones are wrong for your corpus than defend them.
 
 **"Isn't this just for AI-generated content?"**

@@ -1,4 +1,4 @@
-# The fifteen gates, one by one
+# The sixteen gates, one by one
 
 Each gate below has the same four parts: the failure it was written for, what it checks, an example finding from the fixture site, and the fix. The examples come from "Isla Verde", a fictional island market that ships with the package. Every number in it is invented.
 
@@ -301,8 +301,27 @@ src/content/guides/bad-claims.mdx   nightly rate without a source: "$140 per nig
 
 ---
 
+## 16 agent-surface
+
+**The failure.** An agent directory asks what this site is and finds nothing. An assistant asks for the text of a page and gets HTML with a navigation menu inside it. Both files existed once; a rename or a deploy quietly dropped them, and nobody noticed, because no human ever opens those addresses.
+
+**What it checks.** Two things. The agent card at `/.well-known/agent.json`: that it is there, that it is valid JSON, and that it names the site, describes it and gives its address. And whether pages offer a markdown rendition of themselves. Missing is a warning, because both standards are early and optional. Broken is a failure: a card that will not parse, a card without its basic fields, or a corpus where some pages have markdown and others have lost it.
+
+**Example.**
+
+```
+.well-known/agent.json              agent card is missing description, url
+src/content/guides/new-guide.mdx    page has no markdown rendition while 312 other page(s) do
+```
+
+**The fix.** Publish the card into the build output rather than into a folder that never ships. Generate the markdown copies in the same step that builds the pages, so a new page cannot arrive without one.
+
+**Config.** Nothing to set: the gate reads the build directory, then `public`.
+
+---
+
 ## Reading the report
 
 - `fail` means the corpus should not ship. `warn` means a person should look. `skip` means the gate had nothing to work with (no build, no redirects file, offline).
 - The terminal shows the first eight findings per gate. `.gates/gates-report.md` shows up to 200 per gate, `.gates/gates-report.json` shows all of them.
-- Fix in order. Gates 01 to 03 are mechanical and take minutes. Gates 05 to 07 are where the corpus debt lives. Gates 13 and 14 are usually one config change. Gate 15 is editorial work and the one that takes days.
+- Fix in order. Gates 01 to 03 are mechanical and take minutes. Gates 05 to 07 are where the corpus debt lives. Gates 13, 14 and 16 are usually one config change or one build step. Gate 15 is editorial work and the one that takes days.

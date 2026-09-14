@@ -46,7 +46,7 @@ Every content site that grows past a few hundred pages accumulates the same debt
 
 Search engines call the third one scaled content abuse. Answer engines quietly stop citing you after the sixth. Buyers leave after the seventh.
 
-These gates were built while running a pipeline that publishes to eleven content sites. Every check exists because that specific failure shipped at least once. The package extracts the checks, drops every site-specific string into a config file, and gives you the same sixteen gates in one command.
+These gates were built while running a pipeline that publishes to fifteen content sites. Every check exists because that specific failure shipped at least once. The package extracts the checks, drops every site-specific string into a config file, and gives you the same sixteen gates in one command.
 
 ## Quick start
 

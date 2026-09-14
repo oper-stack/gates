@@ -18,7 +18,7 @@
 
 **Text:**
 
-I publish to eleven content sites from one pipeline. Over two years the same defects kept shipping past the build: titles cut on a stop word, an H2 with nothing under it, one paragraph on 121 pages with different numbers, llms.txt advertising pages that redirect, yield figures nobody sourced.
+I publish to fifteen content sites from one pipeline. Over two years the same defects kept shipping past the build: titles cut on a stop word, an H2 with nothing under it, one paragraph on 121 pages with different numbers, llms.txt advertising pages that redirect, yield figures nobody sourced.
 
 This package is the sixteen checks I ended up writing, with every site-specific string moved into one JSON config. It runs on 1,660 MDX files in about 13 seconds. The interesting parts are gate 05 (paragraph comparison with digits masked, which is how templated content gets caught), gate 08 (every href in the built HTML resolved against the build and the redirects file) and gate 15 (figures without a named source or example framing in the same paragraph).
 
@@ -48,7 +48,7 @@ What I would like to know: which thresholds are wrong for your corpus, and which
 
 # LinkedIn post
 
-I run a pipeline that publishes to eleven content sites. For two years the same defects shipped past the build log: cut titles, empty sections, one paragraph on 121 pages with the numbers swapped, an AI index advertising pages that no longer existed.
+I run a pipeline that publishes to fifteen content sites. For two years the same defects shipped past the build log: cut titles, empty sections, one paragraph on 121 pages with the numbers swapped, an AI index advertising pages that no longer existed.
 
 I turned the checks that caught them into a free tool. Sixteen gates, one config file, one command. It runs on 1,660 pages in 13 seconds and tells you what must not ship.
 

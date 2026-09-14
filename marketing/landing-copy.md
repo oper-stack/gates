@@ -18,7 +18,7 @@ Working title of the page: **Sixteen gates**
 
 ## Proof strip
 
-- Built on a pipeline that publishes to 11 content sites
+- Built on a pipeline that publishes to 15 content sites
 - 1,660 files, 1,760 built pages, 13 seconds
 - Leads confirmed from ChatGPT, Perplexity and Copilot referrals on sites that pass these gates
 - Every gate exists because that exact failure shipped once

@@ -20,7 +20,7 @@ Hi, tomorrow at 04:00 Argentina time I launch a free tool on Product Hunt: sixte
 Paste, adjust one detail, send. Keep replies short: two to five sentences, one link at most.
 
 **"Congrats on the launch! What made you build this?"**
-Thanks. Eleven content sites on one pipeline, and the same defects kept shipping past the build log: titles cut mid-sentence, sections with nothing under them, one paragraph copied to 121 pages with the numbers swapped. Every gate exists because that exact thing went live at least once.
+Thanks. Fifteen content sites on one pipeline, and the same defects kept shipping past the build log: titles cut mid-sentence, sections with nothing under them, one paragraph copied to 121 pages with the numbers swapped. Every gate exists because that exact thing went live at least once.
 
 **"How is this different from a linter or from Vale?"**
 A linter reads one file. The gates read the corpus: gate 05 compares paragraphs across pages with the digits masked, gate 06 finds sentences shared by three or more pages, gate 14 checks that llms.txt still matches the site, gate 08 resolves every link in the built HTML against the redirects file. You could add some of that to Vale rules; the corpus-level checks are the part nobody had.

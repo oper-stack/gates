@@ -11,7 +11,7 @@ Sixteen automated checks for MDX content sites: cut titles, copied paragraphs wi
 
 **First comment (maker):**
 
-Hi everyone. I run a pipeline that publishes to eleven content sites, some of them past a thousand pages. Every one of these sixteen checks exists because that exact defect shipped at least once and the build log said nothing.
+Hi everyone. I run a pipeline that publishes to fifteen content sites, some of them past a thousand pages. Every one of these sixteen checks exists because that exact defect shipped at least once and the build log said nothing.
 
 The one that hurt most: 121 pages sharing a closing paragraph with the numbers swapped. My duplicate checker compared exact strings, so it never saw it. Google's spam policy has a name for that pattern.
 

@@ -1,3 +1,5 @@
+<img src="https://raw.githubusercontent.com/oper-stack/brand/main/og-gates.png" alt="OperStack gates" width="100%">
+
 # @operstack/gates
 
 Sixteen automated quality gates for content sites. One command, one config file, one report.
